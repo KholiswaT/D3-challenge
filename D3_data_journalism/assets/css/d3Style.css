@@ -6,7 +6,7 @@
 
 .active {
   font-weight: bold;
-  fill: #000;
+  fill: grey;
   transition: fill 0.3s ease-out;
   text-anchor: middle;
 }
@@ -24,7 +24,7 @@
 }
 
 /* font size dependent on radius, see app.js */
-.stateText {
+.Statecircles{
   font-family: sans-serif;
   fill: #fff;
   text-anchor: middle;
@@ -40,7 +40,7 @@
   margin: 0;
 }
 
-.d3-tip {
+.tooltip {
   padding: 6px;
   font-size: 12px;
   line-height: 1;
