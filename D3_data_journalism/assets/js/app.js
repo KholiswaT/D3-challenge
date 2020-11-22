@@ -1,6 +1,7 @@
 //Create function to make graph responsive
 function makeResponsive(){
 
+  //Create margins and define parameters for svg group
 var svgWidth = 960;
 var svgHeight = 500;
 
@@ -14,7 +15,7 @@ var margin = {
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
-// Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
+// Create an SVG wrapper
 var svg = d3.select("#scatter")
   .append("svg")
   .attr("width", svgWidth)
@@ -26,15 +27,14 @@ var chartGroup = svg.append("g")
 // Import Data
 d3.csv("/D3_data_journalism/assets/data/data.csv").then(function(censusData) {
 
-    // Step 1: Parse Data/Cast as numbers
-    // ==============================
+    // Parse Data/Cast as numbers
     censusData.forEach(function(data) {
       data.smokes = +data.smokes;
       data.age = +data.age;
     });
 
-    // Step 2: Create scale functions
-    // ==============================
+    //Create scale functions
+    
     var xLinearScale = d3.scaleLinear()
       .domain([8, d3.max(censusData, d => d.smokes)])
       .range([0, width]);
@@ -43,13 +43,11 @@ d3.csv("/D3_data_journalism/assets/data/data.csv").then(function(censusData) {
       .domain([30, d3.max(censusData, d => d.age)])
       .range([height, 0]);
 
-    // Step 3: Create axis functions
-    // ==============================
+    //Create axis functions
     var bottomAxis = d3.axisBottom(xLinearScale);
     var leftAxis = d3.axisLeft(yLinearScale);
 
-    // Step 4: Append Axes to the chart
-    // ==============================
+    //Append Axes to the chart
     chartGroup.append("g")
       .attr("transform", `translate(0, ${height})`)
       .call(bottomAxis);
@@ -57,9 +55,7 @@ d3.csv("/D3_data_journalism/assets/data/data.csv").then(function(censusData) {
     chartGroup.append("g")
       .call(leftAxis);
 
-    // Step 5: Create Circles
-    // ==============================
-
+    //Create Circles
  
     var circlesGroup = chartGroup.selectAll("circle")
     .data(censusData)
@@ -70,7 +66,7 @@ d3.csv("/D3_data_journalism/assets/data/data.csv").then(function(censusData) {
     .attr("r", "15")
     .attr("fill", "lightblue")
     .attr("stroke", "gray")
-    .attr("opacity", ".5")
+    .attr("opacity", ".75")
     .on('mouseover', toolTip.show)
     .on('mouseout', toolTip.hide);
 
@@ -81,9 +77,9 @@ d3.csv("/D3_data_journalism/assets/data/data.csv").then(function(censusData) {
     .attr("x", d => xLinearScale(d.smokes))
     .attr("y",d => yLinearScale(d.age))
     .attr("font-family", "sans-serif")
-    .attr("font-size", "10px")
+    .attr("font-size", "11px")
     .style("text-anchor", "middle")
-    .style("fill", "gray")
+    .style("fill", "ivory")
     .text(d => d.abbr);
 
   // Create axes labels
@@ -108,12 +104,6 @@ d3.csv("/D3_data_journalism/assets/data/data.csv").then(function(censusData) {
     var toolTip = d3.tip()
       .attr("class", "tooltip")
       .offset([0, 10])
-      .style("background", "#A9A9A9")
-      .style("text-align", "center")
-      .style("font-size", "12px")
-      .style("color","grey")
-      .style("text-transform", "capitalize")
-      .style("border-radius", "4px")
       .html(function(d) {
         return (`${d.state} <br><br> Smokes(%): ${d.smokes}% <br> Age(Median): ${d.age}`);
       });
